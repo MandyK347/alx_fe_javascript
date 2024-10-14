@@ -42,7 +42,7 @@ function addQuote() {
 }
 
 // Function to create add quote form 
-// function createAddQuoteForm (){}
+function createAddQuoteForm() {}
 
 // Save quotes to local storage
 function saveQuotes() {

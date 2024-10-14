@@ -11,8 +11,10 @@ function loadQoutes(){
     showRandomQuote(); // Show a quote when loading
 }
 
+
+// Function to populate categories
 function populatedCategories() {
-    const categories = new Set();
+    const categories = new Set(quotes.map(quote => quote.category));
     quotes.forEach(quote => categories.add(quote.category));
 
     const categoryFilter = document.getElementById('categoryFilter');

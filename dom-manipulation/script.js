@@ -7,7 +7,53 @@ function loadQoutes(){
     if (storedQuotes) {
         quotes = JSON.parse(storedQuotes);
     }
+    populatedCategories();
+    showRandomQuote(); // Show a quote when loading
 }
+
+function populatedCategories() {
+    const categories = new Set();
+    quotes.forEach(quote => categories.add(quote.category));
+
+    const categoryFilter = document.getElementById('categoryFilter');
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+        categoryFilter.appendChild(option);
+    });
+}
+
+// Filtered quotes based on the selected category
+function filterQuotes() {
+    const selectedCategory = document.getElementById('categoryFilter').value
+    const filterQuotes = selectCategory === 'all'
+        ? quotes
+        :quotes.filter(quote => quote.category === selectCategory);
+
+    displayQuotes(filteredQuotes);
+    localStorage.setItem('selectedCategory', selectedCategory); // Save selected Category
+}
+
+// Display quotes in the container
+function displayQuotes(quotesToDisplay) {
+    const quoteDisplay = document.getElementById('quoteDisplay');
+    quoteDisplay.innerHTML = ''; // Clear previous quotes
+    quotesToDisplay.forEach(quote => {
+        const quoteDiv = document.createElement('div');
+        quoteDiv.textContent = '${quote.text} - ${quote.category}';
+        quoteDisplay.appendChild(quoteDiv);
+    });
+}
+
+// Run this on page load to set everything up
+window.onload = function() {
+    loadQoutes();
+
+    const lastSelectedCategory = localStorage.getItem('selectedCategory') || 'all';
+    document.getElementById('categoryFilter').value = lastSelectedCategory;
+    filterQuotes(); // Display quotes based on last selected category
+};
 
 // Display a random quote
 function showRandomQuote() {
@@ -38,6 +84,18 @@ function addQuote() {
         alert('Quote added successfully!');
     } else {
         alert('Please enter both quote and category.');
+    }
+}
+
+function updatedCategoryDropdown(newCategory) {
+    const categoryFilter = document.getElementById('categoryFilter');
+    const optionExists = Array.from(categoryFilter.options).some(option => option.value === newCategory);
+
+    if (!optionExists) {
+        const option = document.createElement('option');
+        option.value = newCategory;
+        option.textContent = newCategory.charAt(0).toUpperCase() + newCategory.slice(1);
+        categoryFilter.appendChild(option);
     }
 }
 

@@ -13,7 +13,7 @@ function loadQoutes(){
 
 
 // Function to populate categories
-function populatedCategories() {
+function populateCategories() {
     const categories = new Set(quotes.map(quote => quote.category));
     quotes.forEach(quote => categories.add(quote.category));
 

@@ -30,7 +30,7 @@ function addQuote() {
     const quoteCategory = document.getElementById('newQouteCategory').value;
 
     if (quoteText && quoteCategory) {
-        const newQuote = { text: quoteText, category: quotecategory };
+        const newQuote = { text: quoteText, category: quoteCategory };
         quotes.push(newQuote);
         saveQuotes();
         document.getElementById('newQuoteText').value = '';
@@ -39,6 +39,37 @@ function addQuote() {
     } else {
         alert('Please enter both quote and category.');
     }
+}
+
+// Function to create add quote form
+function createAddQuoteForm(){
+    // Create a container div for the form
+    const formContainer = document.createElement("div");
+
+    // Create input fields for quote text and category
+    const quoteInput = document.createElement("input");
+    quoteInput.id = "newQuoteText"; // Assign id
+    quoteInput.type = "text";
+    quoteInput.placeholder = "Enter a new quote";
+
+    const categoryInput = document.createElement("input");
+    categoryInput.id = "newQuoteCategory"; // Assign id
+    categoryInput.type = "text";
+    categoryInput.placeholder = "Enter quote category";
+
+    // Create a button to submit the form 
+    const addButton = document.createElement("button");
+    addButton.onclick = addQuote;
+    addButton.textContent = "Add Quote";
+
+    // Append element to the form container
+    formContainer.appendChild(quoteInput);
+    formContainer.appendChild(categoryInput);
+    formContainer.appendChild(addButton);
+
+    // Append the form container to the body
+    document.body.appendChild(formContainer);
+
 }
 
 // Save quotes to local storage

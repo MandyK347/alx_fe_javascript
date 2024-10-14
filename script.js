@@ -25,12 +25,12 @@ function showRandomQuote() {
 document.getElementById('newQoute').addEventListener('click', showRandomQuote);
 
 // Function to add a new quote
-function addQuote() {
+function createAddQuoteForm() {
     const quoteText = document.getElementById('newQouteText').value;
     const quoteCategory = document.getElementById('newQouteCategory').value;
 
     if (quoteText && quoteCategory) {
-        const newQuote = { text: quoteText, category: quotecategory };
+        const newQuote = { text: quoteText, category: quoteCategory };
         quotes.push(newQuote);
         saveQuotes();
         document.getElementById('newQuoteText').value = '';
@@ -40,9 +40,6 @@ function addQuote() {
         alert('Please enter both quote and category.');
     }
 }
-
-// Function to create add quote form 
-function createAddQuoteForm() {}
 
 // Save quotes to local storage
 function saveQuotes() {

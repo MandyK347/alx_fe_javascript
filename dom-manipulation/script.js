@@ -12,13 +12,13 @@ function loadQoutes(){
 // Display a random quote
 function showRandomQuote() {
     if (quotes.length === 0) {
-        document.getElementById('quoteDisplay').innerText = "No quotes available";
+        document.getElementById('quoteDisplay').innerHTML = "No quotes available";
         return;
     }
 
      const randomIndex = Math.floor(Math.random() * quotes.length);
      const randomQuote = quotes[randomIndex];
-     document.getElementById('quoteDisplay').innerText = '${randomQuote.text} - ${randomQuote.category}';
+     document.getElementById('quoteDisplay').innerHTML = '${randomQuote.text} - ${randomQuote.category}';
 }
 
 // Add event listener for showing a new quote

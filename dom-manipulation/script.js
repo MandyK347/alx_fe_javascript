@@ -173,3 +173,76 @@ function importFromJsonFile(event) {
 
 // Add event listener for importing quotes
 document.getElementById('importFile').addEventListener('change', importFromJsonFile);
+
+const quoteDisplay = document.getElementById('quoteDisplay');
+
+// Function to fetch quotes from JSONPlaceholder
+async function  fetchQuotes() {
+    try {
+        const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+        const quotes = await response.json();
+
+        // Display the first quote as an example
+        if (quotes.length >0) {
+            const randomQuote = quote[Math.floor(Math.random() * quote.length)];
+            quoteDisplay.innerHTML = '<p>${randomQuote.title}</p>';
+        }
+    } catch (error) {
+        console.error('Error feching quotes:', error);
+    }
+}
+
+// Function to update local storage
+function updateLocalStorage(newQoutes) {
+    const existingQuotes = JSON.parse(localStorage.getItem('quotes')) || [];
+    let conflictDetected = false;
+    
+    // Check for conflicts
+    newQoutes.forEach(newQuote => {
+        const exportQuote = existingQuotes.find(eq => eq.id === newQuote.id);
+        if (existingQuote && existingQuote.tittle !== newQuote.tittle) {
+            conflictDetected = true;
+            notifyConflictResolution(newQuote, existingQuote);
+        }
+    });
+
+    // Combine existing quotes with new quotes, favoring new ones
+    const updatedQuotes = [...existingQuotes.filter(eq => !newQoutes.some(nq => nq.id === eq.id)), ...newQuotes];
+
+    localStorage.setItem('quotes',JSON.stringify(updatedQuotes));
+
+    if (!conflictDetected) {
+        showNotification("Local storage updated successfully.");
+    }
+}
+
+// Function to notify users of a conflict
+function notifyConflictResolution(newQoute, existingQuote) {
+    notification.innerHTML = `Conflict detected! New quote: "${newQuote.title}" conflicts with existing quote: "${existingQuote.title}". <button onclick="resolveConflict(${newQuote.id}, '${newQuote.title}')">Resolve</button>`;
+    notification.style.display = 'block'
+}
+
+// Function to resolve conflict by updating the local storage
+function resolveConflict(id, newTitle) {
+    const existingQuotes = JSON.parse(localStorage.getItem('quotes')) || [];
+    const updatedQuotes = existingQuotes.map(quote => quote.id === id ? { ...quote, title: newTitle } :quote);
+
+    localStorage.setItem('quotes', JSON.stringify(updatedQuotes));
+    notification.style.display = 'none'; // Hide notification after resolving
+    showNotification("Conflict resolved successfully");
+}
+
+// Function show notifications
+function showNotification(message) {
+    notification.innerHTML = message;
+    notification.style.display = 'block';
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 5000); // Hide after 5 seconds
+}
+
+// Periodically fetch new quotes every 10 seconds
+setInterval(fetchQuotes, 10000);
+
+// Initial fetch to display a quote when the page loads
+fetchQuotes();

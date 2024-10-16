@@ -176,6 +176,20 @@ document.getElementById('importFile').addEventListener('change', importFromJsonF
 
 const quoteDisplay = document.getElementById('quoteDisplay');
 
+// Function to fetch quotes from server
+async function fetchQuotesFromServer() {
+    try {
+        const response = await fetch('https://api.example.com/quotes');
+        if (!response.ok) {
+            throw new Error('Newwork response was not ok');
+        }
+        const quotes = await response.json();
+        return quotes;
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+    }
+}
+
 // Function to fetch quotes from JSONPlaceholder
 async function  fetchQuotes() {
     try {

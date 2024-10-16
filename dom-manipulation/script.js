@@ -242,6 +242,51 @@ async function  fetchQuotes() {
     }
 }
 
+// Function to sync quotes with the server
+function syncQuotes() {
+    // Fetch quotes from the server
+    fetch('/quotes')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch quotes: ${response.statusText}');
+        }
+        return response.json();
+    })
+    .then(fetchedQuotes => {
+        // Merge or replace local quotes with the fetched data (dapendind on use case)
+        quotes = fetchedQuotes; // Replace or merge, depending on the use case
+
+        // Display a random quote if we have data
+        if (quotes.length > 0) {
+            showRandomQuote();
+        } else {
+            console.warn('No quotes available after sync.');
+        }
+    })
+    .catch(error => console.error('Error syncing quotes:', error));
+
+    // Post local quotes to the server
+    fetch('/quotes', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(quotes)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to post quotes: ${response.statusText}');
+        }
+        return response.json();
+    })
+    .then(data => console.log('Quotes synced successfully'))
+    .catch(error => console.error('Error syncing quotes:', error));
+}
+
+// Call syncQuotes every 5 minutes
+setInterval(syncQuotes, 300000)
+
+
 // Function to update local storage
 function updateLocalStorage(newQoutes) {
     const existingQuotes = JSON.parse(localStorage.getItem('quotes')) || [];

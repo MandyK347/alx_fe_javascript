@@ -190,6 +190,42 @@ async function fetchQuotesFromServer() {
     }
 }
 
+// Function for post data to the server
+
+async function postDataToServer(data) {
+    const url = 'https://jsonplaceholder.typicode.com/post'; // Example mock API
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST', // Specify the request method
+            headers: {
+                'Content-Type': 'application/json' // Set the content type
+            },
+            body: JSON.stringify(data) // Convert the data to JSON format
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const responseData = await response.json(); // Parse the JSON response
+        return responseData; // Return the response data
+    } catch (error) {
+        console.error('Error posting data', error);
+    }
+}
+
+// Example usage
+const data = {
+    title: 'foo',
+    body: 'bar',
+    userId: 1,
+};
+
+postDataToServer(data).then(response => {
+    console.log('Response from server:', response);
+});
+
 // Function to fetch quotes from JSONPlaceholder
 async function  fetchQuotes() {
     try {

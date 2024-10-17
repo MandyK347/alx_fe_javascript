@@ -279,7 +279,10 @@ function syncQuotes() {
         }
         return response.json();
     })
-    .then(data => console.log('Quotes synced successfully'))
+    .then(data => {
+        console.log('Quotes synced successfully');
+        console.log('Quotes synced with server!'); // Add this line
+    })
     .catch(error => console.error('Error syncing quotes:', error));
 }
 
